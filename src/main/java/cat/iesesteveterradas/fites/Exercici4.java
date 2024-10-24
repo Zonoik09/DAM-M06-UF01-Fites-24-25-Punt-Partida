@@ -1,6 +1,7 @@
 package cat.iesesteveterradas.fites;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,6 +18,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import jakarta.json.*;
 import org.w3c.dom.*;
 
 
@@ -177,6 +179,25 @@ public class Exercici4 {
     // Escriu la llista en un fitxer JSON utilitzant Jakarta
     public void guardarJSON(String path, ArrayList<String[]> llista) {
         // *************** CODI EXERCICI FITA **********************/
+        JsonArrayBuilder json = Json.createArrayBuilder();
+        for (int i = 0; i < llista.size(); i++) {
+            JsonObject DatosJson = Json.createObjectBuilder()
+                    .add("nom", llista.get(i)[0])
+                    .add("any", llista.get(i)[1])
+                    .add("extensio", llista.get(i)[2])
+                    .add("dificultat", llista.get(i)[3])
+                    .build();
+            json.add(DatosJson);
+        }
+        JsonArray jsonArray = json.build();
+
+        try (JsonWriter jsonWriter = Json.createWriter(new FileWriter(path))) {
+            jsonWriter.writeArray(jsonArray);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     /****************************************************************************/
