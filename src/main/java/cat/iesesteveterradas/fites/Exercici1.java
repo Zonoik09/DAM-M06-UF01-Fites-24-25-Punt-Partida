@@ -1,9 +1,10 @@
 package cat.iesesteveterradas.fites;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -32,13 +33,27 @@ public class Exercici1 {
 
     // Processa el fitxer d'entrada i genera el fitxer de sortida.
     public void executa() {
-        // *************** CODI EXERCICI FITA **********************/
+        try {
+            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePathOut), StandardCharsets.UTF_8));
+            List<String> linies = Files.readAllLines(Paths.get(filePathIn), StandardCharsets.UTF_8);
+            for (String linia : linies) {
+                String newLine = giraText(linia);
+                bw.write(newLine);
+                bw.newLine();
+            }
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // Mètode per invertir el text d'una línia
     public static String giraText(String text) {
-        // *************** CODI EXERCICI FITA **********************/
-        return null; // A substituir 
+        String reverseText = "";
+        for (int i = text.length() - 1; i >= 0; i--) {
+            reverseText = reverseText + text.charAt(i);
+        }
+        return reverseText;
     }
 
     /****************************************************************************/

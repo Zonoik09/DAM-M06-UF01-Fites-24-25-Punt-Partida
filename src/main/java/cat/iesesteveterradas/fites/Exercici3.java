@@ -2,6 +2,7 @@ package cat.iesesteveterradas.fites;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import cat.iesesteveterradas.fites.objectes.Exercici3nau;
 
@@ -50,18 +51,36 @@ public class Exercici3 {
 
     // Mètode per serialitzar la llista a un fitxer
     public void serialitzaLlista(String filePath, ArrayList<Exercici3nau> llista) {
-        // *************** CODI EXERCICI FITA **********************/
+        try (FileOutputStream fos = new FileOutputStream(filePath);
+             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+
+            oos.writeObject(llista.toArray(new Exercici3nau[0]));  // Escriu la llista com un array d'Objecte
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     // Mètode per deserialitzar la llista del fitxer
     public ArrayList<Exercici3nau> deserialitzaLlista(String filePath) {
-        // *************** CODI EXERCICI FITA **********************/
-        return null; // A substituir 
+        ArrayList<Exercici3nau> llista;
+        try (FileInputStream fis = new FileInputStream(filePath);
+             ObjectInputStream ois = new ObjectInputStream(fis)) {
+
+            Exercici3nau[] llistaArray = (Exercici3nau[]) ois.readObject();
+            llista = new ArrayList<>(Arrays.asList(llistaArray));
+
+        } catch (ClassNotFoundException | IOException e) {
+            throw new RuntimeException(e);
+        }
+        return llista;
     }
 
-    // Mètode per imprimir la llista
+        // Mètode per imprimir la llista
     public void imprimeixLlista(ArrayList<Exercici3nau> llista) {
-        // *************** CODI EXERCICI FITA **********************/
+        for (Exercici3nau element:llista) {
+            System.out.println(element.toString());
+        }
     }
 
     /****************************************************************************/

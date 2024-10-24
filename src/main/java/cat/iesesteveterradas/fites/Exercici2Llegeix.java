@@ -4,6 +4,7 @@ import cat.iesesteveterradas.fites.objectes.*;
 
 import java.io.DataInputStream;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,13 +39,26 @@ public class Exercici2Llegeix {
 
     // Mètode que llegeix el fitxer i retorna una llista de persones
     public List<Exercici2Persona> llegeixFitxer(String filePath) {
-        // *************** CODI EXERCICI FITA **********************/
-        return null; // A substituir 
+        List<Exercici2Persona> lista = new ArrayList<>();
+        try (FileInputStream fis = new FileInputStream(filePath); DataInputStream dis = new DataInputStream(fis)){
+            while (dis.available()>0) {
+                String nom = dis.readUTF();
+                String cognom = dis.readUTF();
+                int any = dis.readInt();
+                lista.add(new Exercici2Persona(nom,cognom,any));
+            }
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return lista;
     }
 
     // Mètode que imprimeix les dades de la llista de persones
     public void imprimeixPersones(List<Exercici2Persona> persones) {
-        // *************** CODI EXERCICI FITA **********************/
+        for (Exercici2Persona persona:persones) {
+            System.out.println(persona.toString());
+        }
     }
 
     /****************************************************************************/

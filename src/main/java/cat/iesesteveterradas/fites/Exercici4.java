@@ -1,19 +1,15 @@
 package cat.iesesteveterradas.fites;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPath;
@@ -21,17 +17,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import jakarta.json.Json;
-import jakarta.json.JsonArrayBuilder;
-import jakarta.json.JsonObjectBuilder;
-import jakarta.json.JsonWriter;
-import jakarta.json.JsonWriterFactory;
-import jakarta.json.stream.JsonGenerator;
+import org.w3c.dom.*;
 
 
 /**
@@ -126,7 +112,6 @@ public class Exercici4 {
         llista.add(new String[]{"Javascript", "1995", ".js", "baixa"});
         llista.add(new String[]{"Objective C", "1984", ".m", "baixa"});
         llista.add(new String[]{"Dart", "2011", ".dart", "mitjana"});
-
         // Crear i guardar el document XML
         Document doc = crearDocumentXML(llista);
         guardarXML(filePathXML, doc);
@@ -137,13 +122,56 @@ public class Exercici4 {
 
     // Mètode que crea el document XML a partir de la llista proporcionada
     private Document crearDocumentXML(ArrayList<String[]> llista) {
-        // *************** CODI EXERCICI FITA **********************/
-        return null; // A substituir 
+        Document documento;
+        try {
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = docFactory.newDocumentBuilder();
+            documento = db.newDocument();
+            Element elmRoot = documento.createElement("llista");
+            documento.appendChild(elmRoot);
+            for (int i = 0; i < llista.size(); i++) {
+                Element Lleng = documento.createElement("llenguatge");
+                Attr dif = documento.createAttribute("dificultat");
+                Attr ext = documento.createAttribute("extensio");
+                elmRoot.appendChild(Lleng);
+                dif.setValue(llista.get(i)[3]);
+                ext.setValue(llista.get(i)[2]);
+                Lleng.setAttributeNode(dif);
+                Lleng.setAttributeNode(ext);
+                Element nom = documento.createElement("nom");
+                Element any = documento.createElement("any");
+                Text Nom = documento.createTextNode(llista.get(i)[0]);
+                Text Any = documento.createTextNode(llista.get(i)[1]);
+                nom.appendChild(Nom);
+                any.appendChild(Any);
+                Lleng.appendChild(nom);
+                Lleng.appendChild(any);
+            }
+
+
+            return documento;
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     // Escriu un Document en un fitxer XML
     public static void guardarXML(String path, Document doc) {
-        // *************** CODI EXERCICI FITA **********************/
+        try {
+            if (!new File(path).exists()) {
+                new File(path).createNewFile();
+            }
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            DOMSource source = new DOMSource(doc);
+            StreamResult result = new StreamResult(new File(path));
+            transformer.transform(source, result);
+        } catch (IOException | TransformerException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // Escriu la llista en un fitxer JSON utilitzant Jakarta

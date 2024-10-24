@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Objectius:
@@ -22,7 +23,6 @@ import java.util.ArrayList;
 public class Exercici0 {
 
     private String filePath;
-
     public static void main(String args[]) {
         Exercici0 exercici = new Exercici0();
         // Configurar la ruta del fitxer
@@ -61,32 +61,47 @@ public class Exercici0 {
 
     // Mètode per comprovar l'existència del fitxer
     public Boolean comprovaExistenciaFitxer() {
-        // *************** CODI EXERCICI FITA **********************/
-        return null; // A substituir  
+        File Fitxer = new File(filePath);
+
+        if (Fitxer.exists()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // Mètode per determinar si el fitxer és ocult
     public Boolean determinaSiEsOcult() {
-        // *************** CODI EXERCICI FITA **********************/
-        return null; // A substituir 
+        File Fitxer = new File(filePath);
+        if (Fitxer.isHidden()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // Mètode per obtenir la data de l'última modificació
     public Date obtenirDataUltimaModificacio() {
-        // *************** CODI EXERCICI FITA **********************/
-        return null; // A substituir  
+        File Fitxer = new File(filePath);
+        return new Date(Fitxer.lastModified());
     }
 
     // Mètode per verificar si el fitxer es pot modificar
     public Boolean verificarEsPotModificar() {
-        // *************** CODI EXERCICI FITA **********************/
-        return null; // A substituir 
+        File Fitxer = new File(filePath);
+        if (Fitxer.canWrite())  {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // Mètode per llistar els fitxers del directori base
     public ArrayList<String> llistarArxiusDirectori() {
-        // *************** CODI EXERCICI FITA **********************/
-        return null; // A substituir 
+        File carpeta = new File(System.getProperty("user.dir") + "/data/exercici0/");
+        ArrayList<String> archivos = new ArrayList<>();
+        archivos.addAll(List.of(carpeta.list()));
+        return archivos;
     }
 
     /****************************************************************************/
